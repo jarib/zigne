@@ -8,7 +8,7 @@
   "author": "jari.bakken@gmail.com",
   "license": "MIT",
   "scripts": {
-    "build": "babel src --out-dir cjs",
+    "build": "babel src --out-file cjs/zigne.js --compact --ignore *.test.js",
     "prepublishOnly": "yarn run build",
     "test": "NODE_ENV=test jest src/*.test.js",
     "test:watch": "NODE_ENV=test jest --watch src/*.test.js"
