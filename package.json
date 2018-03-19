@@ -2,34 +2,28 @@
   "name": "zigne",
   "version": "0.0.1",
   "description": "Calculate statistical significance.",
-  "main": "./cjs/index.js",
-  "module": "./src/index.js",
+  "main": "./dist/zigne.node.js",
+  "browser": "./dist/zigne.browser.js",
   "repository": "https://github.com/jarib/zigne",
   "author": "jari.bakken@gmail.com",
   "license": "MIT",
   "scripts": {
-    "build": "babel src --out-file cjs/zigne.js --compact --ignore *.test.js",
+    "build": "NODE_ENV=production webpack",
     "prepublishOnly": "yarn run build",
     "test": "NODE_ENV=test jest src/*.test.js",
     "test:watch": "NODE_ENV=test jest --watch src/*.test.js"
   },
-  "babel": {
-    "presets": [
-      "env"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
-  },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-jest": "^23.0.0-alpha.0",
     "babel-preset-env": "^1.6.1",
     "jest": "^22.4.2",
-    "regenerator-runtime": "^0.11.1"
+    "regenerator-runtime": "^0.11.1",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12"
   },
   "dependencies": {
+    "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0"
   }
 }
