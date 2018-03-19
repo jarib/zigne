@@ -1,28 +1,32 @@
-import Joi from 'joi';
-
 function validate(item, schema) {
     if (!item) {
         throw new Error(`invalid argument: ${item}`);
     }
 
-    const result = Joi.validate(item, schema);
+    const errors = [];
 
-    if (result.error) {
-        throw new Error(result.error);
+    Object.entries(schema).forEach(([key, type]) => {
+        if (typeof item[key] !== type) {
+            errors.push(`expected '${type}' for ${key}`);
+        }
+    });
+
+    if (Object.keys(errors).length) {
+        throw new Error(`validation failed: ${errors.join(', ')}`);
     }
 
     return item;
 }
 
-const series = Joi.object().keys({
-    sampleSize: Joi.number().required(),
-});
+const series = {
+    sampleSize: 'number',
+};
 
-const item = Joi.object().keys({
-    name: Joi.string().required(),
-    percentage: Joi.number().required(),
-    sampleSize: Joi.number().required(),
-});
+const item = {
+    name: 'string',
+    percentage: 'number',
+    sampleSize: 'number',
+};
 
 export default {
     item,

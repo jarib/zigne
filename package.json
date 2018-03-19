@@ -14,8 +14,12 @@
     "test:watch": "NODE_ENV=test jest --watch src/*.test.js"
   },
   "babel": {
-    "presets": ["env"],
-    "plugins": ["transform-object-rest-spread"]
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -26,7 +30,6 @@
     "regenerator-runtime": "^0.11.1"
   },
   "dependencies": {
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "joi": "^13.1.2"
+    "babel-plugin-transform-object-rest-spread": "^6.26.0"
   }
 }
