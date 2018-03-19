@@ -2,6 +2,14 @@
 
 Simple utilities to calculate statistical significance and confidence intervals. Made in the context of multi-party election polling where you may want to check if the difference between two population proportions are significant.
 
+### Installation
+
+    $ npm install zigne
+
+or
+
+    $ yarn add zigne
+
 ### Usage
 
 ```js

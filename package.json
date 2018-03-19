@@ -1,6 +1,6 @@
 {
   "name": "zigne",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Calculate statistical significance.",
   "main": "./dist/zigne.node.js",
   "browser": "./dist/zigne.browser.js",
@@ -9,10 +9,11 @@
   "license": "MIT",
   "scripts": {
     "build": "NODE_ENV=production webpack",
-    "prepublishOnly": "yarn run build",
+    "prepare": "yarn build",
     "test": "NODE_ENV=test jest src/*.test.js",
     "test:watch": "NODE_ENV=test jest --watch src/*.test.js"
   },
+  "files": ["dist"],
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-jest": "^23.0.0-alpha.0",
@@ -20,9 +21,7 @@
     "jest": "^22.4.2",
     "regenerator-runtime": "^0.11.1",
     "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12"
-  },
-  "dependencies": {
+    "webpack-cli": "^2.0.12",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-object-rest-spread": "^6.26.0"
   }
