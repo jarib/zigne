@@ -182,7 +182,7 @@ test('calculates significance of a real poll (B)', () => {
     expect(b.items.FrP.high).toBeCloseTo(18.2, 1);
 });
 
-test('it finds the confidence interval and error margin of a single item', () => {
+test('it finds the confidence interval and error margin of a single item (ci = 95%)', () => {
     const item = zigne.item({
         name: 'test',
         percentage: 52.0,
@@ -192,6 +192,19 @@ test('it finds the confidence interval and error margin of a single item', () =>
     expect(item.low).toBeCloseTo(48.9);
     expect(item.high).toBeCloseTo(55.1);
     expect(item.marginOfError).toBeCloseTo(3.1);
+});
+
+test('it finds the confidence interval and error margin of a single item (ci = 99%)', () => {
+    const item = zigne.item({
+        name: 'test',
+        percentage: 50.0,
+        sampleSize: 1000,
+        z: 99,
+    });
+
+    expect(item.low).toBeCloseTo(45.9, 1);
+    expect(item.high).toBeCloseTo(54.1, 1);
+    expect(item.marginOfError).toBeCloseTo(4.1, 1);
 });
 
 test('smokers', () => {
@@ -210,17 +223,14 @@ test('smokers', () => {
     expect(diff.stddev).toBeCloseTo(5.0, 1);
 });
 
-xtest('it compares two values from the same sample (A)', () => {
+test('it compares two values from the same sample (A)', () => {
     const sampleSize = 220;
 
     const Kåre = zigne.item({ name: 'Kåre', percentage: 56, sampleSize });
     const Gro = zigne.item({ name: 'Gro', percentage: 44, sampleSize });
 
-    const stddev = Math.sqrt(
-        Kåre.percentage +
-            Gro.percentage -
-            Math.pow(Kåre.percentage - Gro.percentage, 2) / sampleSize
-    );
+    const diff = Kåre.compare(Gro, { sameSample: true });
 
-    inspect({ stddev, marginOfError: stddev * 1.645 });
+    expect(diff.marginOfError).toBeCloseTo(12.3, 1);
+    expect(diff.significant).toBe(false);
 });

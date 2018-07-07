@@ -14,6 +14,12 @@ const coefficients = {
     },
 };
 
+const sampleTypes = {
+    simpleRandom: 1,
+    clustered: 1.2,
+    quota: 1.5,
+};
+
 export class Item {
     constructor(opts) {
         const data = schema.validate(opts, schema.item);
@@ -21,15 +27,17 @@ export class Item {
         const sampleSize = opts.sampleSize;
 
         const v = stats.variance(data.percentage, sampleSize);
-        const sdev = stats.stddev(data.percentage, sampleSize);
-        const moe = coefficients.z95.twoTailed * sdev;
+        const stddev = stats.stddev(data.percentage, sampleSize);
+        const z = this._getCoefficient(opts.z || 95, opts.test || 'twoTailed');
+        const moe = z * stddev;
 
         Object.assign(this, {
             name: opts.name,
             percentage: opts.percentage,
             count: sampleSize * (opts.percentage / 100),
             variance: v,
-            stddev: sdev,
+            stddev,
+            z,
             marginOfError: moe,
             low: opts.percentage - moe,
             high: opts.percentage + moe,
@@ -37,13 +45,61 @@ export class Item {
         });
     }
 
-    compare(right) {
+    _getCoefficient(z, test) {
+        const zdata = coefficients[`z${z}`];
+
+        if (!zdata) {
+            throw new Error(`unknown z value for z = ${z}, expected 95 or 99`);
+        }
+
+        const coeff = zdata[test];
+
+        if (!coeff) {
+            throw new Error(
+                `unknown test ${test}, expected oneTailed or twoTailed`
+            );
+        }
+
+        return coeff;
+    }
+
+    compare(
+        right,
+        {
+            test = 'oneTailed',
+            sampleType = 'simpleRandom',
+            z = 95,
+            sameSample = false,
+        } = {}
+    ) {
         const left = this;
         const diff = right.percentage - left.percentage;
+        const diffAbs = Math.abs(diff);
 
-        const stddev = Math.sqrt(left.variance + right.variance);
+        let variance = left.variance + right.variance;
 
-        const marginOfError = coefficients.z95.oneTailed * stddev;
+        if (sameSample) {
+            if (left.sampleSize !== right.sampleSize) {
+                throw new Error(
+                    'sample size of both items must be equal when comparing same sample'
+                );
+            }
+
+            if (left.percentage + right.percentage > 100) {
+                throw new Error(
+                    'sum of percentages from same sample cannot be greater than 100'
+                );
+            }
+
+            variance +=
+                (3 * (left.percentage * right.percentage)) / left.sampleSize;
+        }
+
+        const stddev = Math.sqrt(variance);
+
+        const zValue = this._getCoefficient(z, test);
+
+        const marginOfError = zValue * stddev;
         const low = diff - marginOfError;
         const high = diff + marginOfError;
 
@@ -51,10 +107,11 @@ export class Item {
             items: [left, right],
             stddev: stddev,
             difference: diff,
+            t: diffAbs / stddev,
             low,
             high,
             marginOfError: marginOfError,
-            significant: Math.abs(diff) > Math.abs(marginOfError),
+            significant: diffAbs > Math.abs(marginOfError),
         };
     }
 }
@@ -80,14 +137,17 @@ export default class Series {
         }
     }
 
-    compare(otherSeries) {
+    compare(otherSeries, opts = {}) {
         const result = {};
 
         Object.entries(this.items).forEach(([name, left]) => {
             const right = otherSeries.items[left.name];
 
             if (right) {
-                result[name] = left.compare(right);
+                result[name] = left.compare(right, {
+                    ...opts,
+                    sameSample: false,
+                });
             } else {
                 result[name] = null;
             }
