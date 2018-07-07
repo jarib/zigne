@@ -28,6 +28,7 @@ export class Item {
 
         const v = stats.variance(data.percentage, sampleSize);
         const stddev = stats.stddev(data.percentage, sampleSize);
+
         const z = this._getCoefficient(opts.z || 95, opts.test || 'twoTailed');
         const moe = z * stddev;
 
@@ -108,6 +109,7 @@ export class Item {
             stddev: stddev,
             difference: diff,
             t: diffAbs / stddev,
+            z: zValue,
             low,
             high,
             marginOfError: marginOfError,
