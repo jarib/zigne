@@ -86,18 +86,18 @@ export class Item {
                 );
             }
 
+            const sampleSize = left.sampleSize;
+
             if (left.percentage + right.percentage > 100) {
                 throw new Error(
                     'sum of percentages from same sample cannot be greater than 100'
                 );
             }
 
-            variance +=
-                (3 * (left.percentage * right.percentage)) / left.sampleSize;
+            variance += (3 * (left.percentage * right.percentage)) / sampleSize;
         }
 
         const stddev = Math.sqrt(variance);
-
         const zValue = this._getCoefficient(z, test);
 
         const marginOfError = zValue * stddev;

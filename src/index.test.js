@@ -228,9 +228,19 @@ test('it compares two values from the same sample (A)', () => {
 
     const Kåre = zigne.item({ name: 'Kåre', percentage: 56, sampleSize });
     const Gro = zigne.item({ name: 'Gro', percentage: 44, sampleSize });
+    const diff = Kåre.compare(Gro, { sameSample: true, test: 'twoTailed' });
 
-    const diff = Kåre.compare(Gro, { sameSample: true });
-
-    expect(diff.marginOfError).toBeCloseTo(12.3, 1);
+    expect(diff.marginOfError).toBeCloseTo(14.7, 1);
     expect(diff.significant).toBe(false);
+});
+
+test('it compares two values from the same sample (B)', () => {
+    const sampleSize = 220;
+
+    const Kåre = zigne.item({ name: 'Kåre', percentage: 58, sampleSize });
+    const Gro = zigne.item({ name: 'Gro', percentage: 42, sampleSize });
+    const diff = Kåre.compare(Gro, { sameSample: true, test: 'twoTailed' });
+
+    expect(diff.marginOfError).toBeCloseTo(14.6, 1);
+    expect(diff.significant).toBe(true);
 });
