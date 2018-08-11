@@ -1,6 +1,6 @@
 {
   "name": "zigne",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Calculate statistical significance.",
   "main": "./dist/zigne.node.js",
   "browser": "./dist/zigne.browser.js",
