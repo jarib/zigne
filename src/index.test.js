@@ -182,7 +182,7 @@ test('calculates significance of a real poll (B)', () => {
     expect(b.items.FrP.high).toBeCloseTo(18.2, 1);
 });
 
-test('it finds the confidence interval and error margin of a single item (ci = 95%)', () => {
+test('it finds the confidence interval and error margin of a single item (confidence level = 95%)', () => {
     const item = zigne.item({
         name: 'test',
         percentage: 52.0,
@@ -194,12 +194,12 @@ test('it finds the confidence interval and error margin of a single item (ci = 9
     expect(item.marginOfError).toBeCloseTo(3.1);
 });
 
-test('it finds the confidence interval and error margin of a single item (ci = 99%)', () => {
+test('it finds the confidence interval and error margin of a single item (confidence level = 99%)', () => {
     const item = zigne.item({
         name: 'test',
         percentage: 50.0,
         sampleSize: 1000,
-        z: 99,
+        confidenceLevel: 99,
     });
 
     expect(item.low).toBeCloseTo(45.9, 1);

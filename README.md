@@ -20,7 +20,11 @@ import zigne from 'zigne';
 const itemLeft = zigne.item({ name: 'A', percentage: 25.8, sampleSize: 977 });
 const itemRight = zigne.item({ name: 'A', percentage: 20.1, sampleSize: 980 });
 
-const comparison = itemLeft.compare(itemRight);
+const comparison = itemLeft.compare(itemRight, {
+  test: 'twoTailed',
+  confidenceLevel: 95,
+});
+
 comparison.significant; //=> true
 comparison.marginOfError; //=> 3.12
 comparison.difference; //=> -5.6...
@@ -38,7 +42,10 @@ seriesRight.add({ name: 'A', percentage: 29.8 });
 seriesRight.add({ name: 'B', percentage: 11.8 });
 seriesRight.add({ name: 'C', percentage: 1.2 });
 
-const seriesComparison = seriesLeft.compare(seriesRight);
+const seriesComparison = seriesLeft.compare(seriesRight, {
+  test: 'oneTailed',
+  confidenceLevel: 95,
+});
 
 seriesComparison.A.significant; //=> true
 seriesComparison.B.significant; //=> false
@@ -52,4 +59,4 @@ seriesComparison.C.significant; //=> true
 
 ### Credits
 
-* [Bernt Aardal's original Zigne](http://www.aardal.info/celius-zigne/)
+- [Bernt Aardal's original Zigne](http://www.aardal.info/celius-zigne/)

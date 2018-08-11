@@ -29,7 +29,10 @@ export class Item {
         const v = stats.variance(data.percentage, sampleSize);
         const stddev = stats.stddev(data.percentage, sampleSize);
 
-        const z = this._getCoefficient(opts.z || 95, opts.test || 'twoTailed');
+        const z = this._getCoefficient(
+            opts.confidenceLevel || 95,
+            opts.test || 'twoTailed'
+        );
         const moe = z * stddev;
 
         Object.assign(this, {
@@ -46,11 +49,13 @@ export class Item {
         });
     }
 
-    _getCoefficient(z, test) {
-        const zdata = coefficients[`z${z}`];
+    _getCoefficient(confidenceLevel, test) {
+        const zdata = coefficients[`z${confidenceLevel}`];
 
         if (!zdata) {
-            throw new Error(`unknown z value for z = ${z}, expected 95 or 99`);
+            throw new Error(
+                `unknown value for confidenceLevel = ${z}, expected 95 or 99`
+            );
         }
 
         const coeff = zdata[test];
@@ -69,7 +74,7 @@ export class Item {
         {
             test = 'oneTailed',
             sampleType = 'simpleRandom',
-            z = 95,
+            confidenceLevel = 95,
             sameSample = false,
         } = {}
     ) {
@@ -98,9 +103,9 @@ export class Item {
         }
 
         const stddev = Math.sqrt(variance);
-        const zValue = this._getCoefficient(z, test);
+        const z = this._getCoefficient(confidenceLevel, test);
 
-        const marginOfError = zValue * stddev;
+        const marginOfError = z * stddev;
         const low = diff - marginOfError;
         const high = diff + marginOfError;
 
@@ -109,7 +114,7 @@ export class Item {
             stddev: stddev,
             difference: diff,
             t: diffAbs / stddev,
-            z: zValue,
+            z,
             low,
             high,
             marginOfError: marginOfError,
