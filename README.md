@@ -55,7 +55,7 @@ seriesComparison.C.significant; //=> true
 ### Development
 
     $ yarn install
-    $ yarn test:watch
+    $ yarn tdd
 
 ### Credits
 

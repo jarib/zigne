@@ -108,8 +108,9 @@ export class Item {
         }
 
         if (
-            (populationSize && populationSize < left.sampleSize) ||
-            populationSize < right.sampleSize
+            populationSize &&
+            (populationSize < left.sampleSize ||
+                populationSize < right.sampleSize)
         ) {
             throw new Error('population size must be greater than sample size');
         }
