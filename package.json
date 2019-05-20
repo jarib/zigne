@@ -1,6 +1,6 @@
 {
   "name": "zigne",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Calculate statistical significance.",
   "main": "./dist/zigne.node.js",
   "browser": "./dist/zigne.browser.js",
@@ -18,13 +18,13 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
     "jest": "^24.8.0",
     "regenerator-runtime": "^0.11.1",
     "webpack": "^4.1.1",
-    "webpack-cli": "^3.3.2",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.4"
+    "webpack-cli": "^3.3.2"
   }
 }
