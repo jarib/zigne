@@ -209,6 +209,7 @@ test('it finds the confidence interval and error margin of a single item (confid
 
 test('smokers', () => {
     const a = zigne.item({ name: 'Smokers', percentage: 63, sampleSize: 150 });
+
     const b = zigne.item({
         name: 'Non-smokers',
         percentage: 42,
@@ -228,9 +229,9 @@ test('it compares two values from the same sample (A)', () => {
 
     const Kåre = zigne.item({ name: 'Kåre', percentage: 56, sampleSize });
     const Gro = zigne.item({ name: 'Gro', percentage: 44, sampleSize });
-    const diff = Kåre.compare(Gro, { sameSample: true, test: 'twoTailed' });
+    const diff = Kåre.compare(Gro, { sameSample: true, test: 'oneTailed' });
 
-    expect(diff.marginOfError).toBeCloseTo(14.7, 1);
+    expect(diff.marginOfError).toBeCloseTo(12.3, 1);
     expect(diff.significant).toBe(false);
 });
 
@@ -239,8 +240,69 @@ test('it compares two values from the same sample (B)', () => {
 
     const Kåre = zigne.item({ name: 'Kåre', percentage: 58, sampleSize });
     const Gro = zigne.item({ name: 'Gro', percentage: 42, sampleSize });
-    const diff = Kåre.compare(Gro, { sameSample: true, test: 'twoTailed' });
+    const diff = Kåre.compare(Gro, { sameSample: true, test: 'oneTailed' });
 
-    expect(diff.marginOfError).toBeCloseTo(14.6, 1);
+    expect(diff.marginOfError).toBeCloseTo(12.27, 1);
     expect(diff.significant).toBe(true);
+});
+
+test('adjusts for population size (same sample)', () => {
+    const sampleSize = 220;
+    const populationSize = 300;
+
+    const Kåre = zigne.item({
+        name: 'Kåre',
+        percentage: 58,
+        sampleSize,
+        populationSize,
+    });
+
+    const Gro = zigne.item({
+        name: 'Gro',
+        percentage: 42,
+        sampleSize,
+        populationSize,
+    });
+
+    const diff = Kåre.compare(Gro, { sameSample: true, test: 'oneTailed' });
+
+    expect(diff.marginOfError).toBeCloseTo(6.3, 1);
+    expect(diff.significant).toBe(true);
+});
+
+test('adjusts for population size for two separate samples', () => {
+    let a = zigne.item({ name: 'a', percentage: 63, sampleSize: 150 });
+
+    let b = zigne.item({
+        name: 'b',
+        percentage: 42,
+        sampleSize: 250,
+    });
+
+    expect(a.marginOfError).toBeCloseTo(7.7, 1);
+    expect(b.marginOfError).toBeCloseTo(6.1, 1);
+
+    let diff = a.compare(b, { test: 'twoTailed' });
+    expect(diff.marginOfError).toBeCloseTo(9.9, 1);
+    expect(diff.significant).toBe(true);
+
+    a = zigne.item({
+        name: 'a',
+        percentage: 63,
+        sampleSize: 150,
+        populationSize: 300,
+    });
+
+    b = zigne.item({
+        name: 'b',
+        percentage: 42,
+        sampleSize: 250,
+        populationSize: 300,
+    });
+
+    expect(a.marginOfError).toBeCloseTo(5.5, 1);
+    expect(b.marginOfError).toBeCloseTo(2.5, 1);
+
+    diff = a.compare(b, { test: 'twoTailed' });
+    expect(diff.marginOfError).toBeCloseTo(6.0, 1);
 });

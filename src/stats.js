@@ -7,14 +7,14 @@ function stddev(p, n, N) {
     let v = variance(p, n);
 
     if (N) {
-        v *= 1 - N / n;
+        v *= 1 - n / N;
     }
 
     return Math.sqrt(v);
 }
 
 function variance(p, n) {
-    return p * (100 - p) / n;
+    return (p * (100 - p)) / n;
 }
 
 export default { stddev, variance, round };

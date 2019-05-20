@@ -25,14 +25,25 @@ export class Item {
         const data = schema.validate(opts, schema.item);
 
         const sampleSize = opts.sampleSize;
+        const populationSize = opts.populationSize;
 
-        const v = stats.variance(data.percentage, sampleSize);
-        const stddev = stats.stddev(data.percentage, sampleSize);
+        if (populationSize && populationSize < sampleSize) {
+            throw new Error('population size must be greater than sample size');
+        }
+
+        const v = stats.variance(data.percentage, sampleSize, populationSize);
+
+        const stddev = stats.stddev(
+            data.percentage,
+            sampleSize,
+            populationSize
+        );
 
         const z = this._getCoefficient(
             opts.confidenceLevel || 95,
             opts.test || 'twoTailed'
         );
+
         const moe = z * stddev;
 
         Object.assign(this, {
@@ -46,6 +57,7 @@ export class Item {
             low: opts.percentage - moe,
             high: opts.percentage + moe,
             sampleSize: sampleSize,
+            populationSize: populationSize,
         });
     }
 
@@ -84,14 +96,30 @@ export class Item {
 
         let variance = left.variance + right.variance;
 
+        const sampleSize = left.sampleSize;
+        const populationSize = left.populationSize;
+
+        if (left.populationSize !== right.populationSize) {
+            throw new Error(
+                `population size of both items must be equal, got ${
+                    left.populationSize
+                } and ${right.populationSize}`
+            );
+        }
+
+        if (
+            (populationSize && populationSize < left.sampleSize) ||
+            populationSize < right.sampleSize
+        ) {
+            throw new Error('population size must be greater than sample size');
+        }
+
         if (sameSample) {
             if (left.sampleSize !== right.sampleSize) {
                 throw new Error(
                     'sample size of both items must be equal when comparing same sample'
                 );
             }
-
-            const sampleSize = left.sampleSize;
 
             if (left.percentage + right.percentage > 100) {
                 throw new Error(
@@ -100,6 +128,14 @@ export class Item {
             }
 
             variance += (3 * (left.percentage * right.percentage)) / sampleSize;
+
+            if (populationSize) {
+                variance *= 1 - sampleSize / populationSize;
+            }
+        } else if (populationSize) {
+            variance = left.variance * (1 - left.sampleSize / populationSize);
+            variance +=
+                right.variance * (1 - right.sampleSize / populationSize);
         }
 
         const stddev = Math.sqrt(variance);
