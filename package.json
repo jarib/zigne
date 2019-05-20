@@ -1,32 +1,32 @@
 {
-  "name": "zigne",
-  "version": "0.0.5",
-  "description": "Calculate statistical significance.",
-  "main": "./dist/zigne.node.js",
-  "browser": "./dist/zigne.browser.js",
-  "repository": "https://github.com/jarib/zigne",
-  "author": "jari.bakken@gmail.com",
-  "license": "MIT",
-  "scripts": {
-    "build": "NODE_ENV=production webpack",
-    "prepare": "yarn build",
-    "test": "NODE_ENV=test jest src/*.test.js",
-    "test:watch": "NODE_ENV=test jest --watch src/*.test.js"
-  },
-  "files": [
-    "dist"
-  ],
-  "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
-    "babel-jest": "^24.8.0",
-    "babel-loader": "^8.0.6",
-    "jest": "^24.8.0",
-    "regenerator-runtime": "^0.11.1",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^3.3.2"
-  },
-  "dependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.4"
-  }
+    "name": "zigne",
+    "version": "0.0.6",
+    "description": "Calculate statistical significance.",
+    "main": "./dist/zigne.node.js",
+    "browser": "./dist/zigne.browser.js",
+    "repository": "https://github.com/jarib/zigne",
+    "author": "jari.bakken@gmail.com",
+    "license": "MIT",
+    "scripts": {
+        "build": "NODE_ENV=production webpack",
+        "prepare": "yarn build",
+        "test": "NODE_ENV=test jest src/*.test.js",
+        "test:watch": "NODE_ENV=test jest --watch src/*.test.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "devDependencies": {
+        "@babel/core": "^7.4.4",
+        "@babel/preset-env": "^7.4.4",
+        "babel-jest": "^24.8.0",
+        "babel-loader": "^8.0.6",
+        "jest": "^24.8.0",
+        "regenerator-runtime": "^0.11.1",
+        "webpack": "^4.1.1",
+        "webpack-cli": "^3.3.2"
+    },
+    "dependencies": {
+        "@babel/plugin-proposal-object-rest-spread": "^7.4.4"
+    }
 }
