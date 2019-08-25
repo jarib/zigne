@@ -25,6 +25,7 @@
         "jest": "^24.8.0",
         "regenerator-runtime": "^0.11.1",
         "webpack": "^4.1.1",
-        "webpack-cli": "^3.3.2"
+        "webpack-cli": "^3.3.2",
+        "lodash": "^4.17.15"
     }
 }
