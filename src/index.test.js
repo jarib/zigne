@@ -3,7 +3,7 @@ import util from 'util';
 
 const inspect = result => console.log(util.inspect(result, { depth: 5 }));
 
-test('calculates significance of changes in a series', () => {
+it('calculates significance of changes in a series', () => {
     const last = zigne.series({ sampleSize: 1003 });
     last.add({ name: 'A', percentage: 23.4 });
     last.add({ name: 'B', percentage: 13.1 });
@@ -23,7 +23,7 @@ test('calculates significance of changes in a series', () => {
     expect(result.B.significant).toBe(true);
 });
 
-test('series fails if adding an invalid item', () => {
+it('series fails if adding an invalid item', () => {
     const series = zigne.series({ sampleSize: 100 });
 
     expect(() => {
@@ -31,7 +31,7 @@ test('series fails if adding an invalid item', () => {
     }).toThrow();
 });
 
-test('eøs', () => {
+it('eøs', () => {
     const old = zigne.series({ sampleSize: 1000 });
     old.add({ name: 'eu', percentage: 55 });
 
@@ -43,7 +43,7 @@ test('eøs', () => {
     expect(compared.eu.significant).toBe(true);
 });
 
-test('calculates significance of a real poll (A)', () => {
+it('calculates significance of a real poll (A)', () => {
     const a = zigne.series({ sampleSize: 1000 });
 
     a.add({ name: 'RV', percentage: 1.8 });
@@ -107,7 +107,7 @@ test('calculates significance of a real poll (A)', () => {
     expect(result.Andre.significant).toBe(false);
 });
 
-test('calculates significance of a real poll (B)', () => {
+it('calculates significance of a real poll (B)', () => {
     const a = zigne.series({ sampleSize: 1003 });
 
     a.add({ name: 'RV', percentage: 3.1 });
@@ -182,7 +182,7 @@ test('calculates significance of a real poll (B)', () => {
     expect(b.items.FrP.high).toBeCloseTo(18.2, 1);
 });
 
-test('it finds the confidence interval and error margin of a single item (confidence level = 95%)', () => {
+it('it finds the confidence interval and error margin of a single item (confidence level = 95%)', () => {
     const item = zigne.item({
         name: 'test',
         percentage: 52.0,
@@ -194,7 +194,7 @@ test('it finds the confidence interval and error margin of a single item (confid
     expect(item.marginOfError).toBeCloseTo(3.1);
 });
 
-test('it finds the confidence interval and error margin of a single item (confidence level = 99%)', () => {
+it('it finds the confidence interval and error margin of a single item (confidence level = 99%)', () => {
     const item = zigne.item({
         name: 'test',
         percentage: 50.0,
@@ -207,7 +207,7 @@ test('it finds the confidence interval and error margin of a single item (confid
     expect(item.marginOfError).toBeCloseTo(4.1, 1);
 });
 
-test('smokers', () => {
+it('smokers', () => {
     const a = zigne.item({ name: 'Smokers', percentage: 63, sampleSize: 150 });
 
     const b = zigne.item({
@@ -224,7 +224,7 @@ test('smokers', () => {
     expect(diff.stddev).toBeCloseTo(5.0, 1);
 });
 
-test('it compares two values from the same sample (A)', () => {
+it('it compares two values from the same sample (A)', () => {
     const sampleSize = 220;
 
     const Kåre = zigne.item({ name: 'Kåre', percentage: 56, sampleSize });
@@ -235,7 +235,7 @@ test('it compares two values from the same sample (A)', () => {
     expect(diff.significant).toBe(false);
 });
 
-test('it compares two values from the same sample (B)', () => {
+it('it compares two values from the same sample (B)', () => {
     const sampleSize = 220;
 
     const Kåre = zigne.item({
@@ -255,7 +255,7 @@ test('it compares two values from the same sample (B)', () => {
     expect(diff.significant).toBe(true);
 });
 
-test('it ignores population size if null', () => {
+it('it ignores population size if null', () => {
     const sampleSize = 220;
 
     const Kåre = zigne.item({
@@ -277,7 +277,7 @@ test('it ignores population size if null', () => {
     expect(diff.significant).toBe(true);
 });
 
-test('adjusts for population size (same sample)', () => {
+it('adjusts for population size (same sample)', () => {
     const sampleSize = 220;
     const populationSize = 300;
 
@@ -301,7 +301,7 @@ test('adjusts for population size (same sample)', () => {
     expect(diff.significant).toBe(true);
 });
 
-test('adjusts for population size for two separate samples', () => {
+it('adjusts for population size for two separate samples', () => {
     let a = zigne.item({ name: 'a', percentage: 63, sampleSize: 150 });
 
     let b = zigne.item({
