@@ -1,7 +1,7 @@
 {
     "name": "zigne",
-    "version": "0.0.8",
-    "description": "Calculate statistical significance.",
+    "version": "0.0.9",
+    "description": "Calculate statistical significance (z-test), for e.g. polls.",
     "main": "./dist/zigne.node.js",
     "browser": "./dist/zigne.browser.js",
     "repository": "https://github.com/jarib/zigne",
