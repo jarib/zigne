@@ -336,4 +336,16 @@ it('adjusts for population size for two separate samples', () => {
 
     diff = a.compare(b, { test: 'twoTailed' });
     expect(diff.marginOfError).toBeCloseTo(6.0, 1);
+
+    const c = zigne.item({
+        name: 'a',
+        percentage: 63,
+        sampleSize: 150,
+        populationSize: 500,
+    });
+
+    expect(c.marginOfError).toBeCloseTo(6.5, 1);
+
+    diff = c.compare(b, { test: 'twoTailed' });
+    expect(diff.marginOfError).toBeCloseTo(6.9, 1);
 });

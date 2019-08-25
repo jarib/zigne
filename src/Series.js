@@ -94,23 +94,17 @@ export class Item {
         const diff = right.percentage - left.percentage;
         const diffAbs = Math.abs(diff);
 
-        let variance = left.variance + right.variance;
+        let variance;
 
-        const sampleSize = left.sampleSize;
-        const populationSize = left.populationSize;
-
-        if (left.populationSize !== right.populationSize) {
+        if (sameSample && left.populationSize !== right.populationSize) {
             throw new Error(
-                `population size of both items must be equal, got ${
-                    left.populationSize
-                } and ${right.populationSize}`
+                `population size of both items must be equal, got ${left.populationSize} and ${right.populationSize}`
             );
         }
 
         if (
-            populationSize &&
-            (populationSize < left.sampleSize ||
-                populationSize < right.sampleSize)
+            (left.populationSize && left.populationSize < left.sampleSize) ||
+            (right.populationSize && right.populationSize < right.sampleSize)
         ) {
             throw new Error('population size must be greater than sample size');
         }
@@ -128,15 +122,23 @@ export class Item {
                 );
             }
 
+            const sampleSize = left.sampleSize;
+            const populationSize = left.populationSize;
+
+            variance = left.variance + right.variance;
             variance += (3 * (left.percentage * right.percentage)) / sampleSize;
 
             if (populationSize) {
                 variance *= 1 - sampleSize / populationSize;
             }
-        } else if (populationSize) {
-            variance = left.variance * (1 - left.sampleSize / populationSize);
-            variance +=
-                right.variance * (1 - right.sampleSize / populationSize);
+        } else {
+            variance = left.populationSize
+                ? left.variance * (1 - left.sampleSize / left.populationSize)
+                : left.variance;
+
+            variance += right.populationSize
+                ? right.variance * (1 - right.sampleSize / right.populationSize)
+                : right.variance;
         }
 
         const stddev = Math.sqrt(variance);
